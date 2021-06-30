@@ -247,19 +247,6 @@ public class SplashScreen extends CordovaPlugin {
             return;
         }
 
-        if (splashDialog != null) {
-            splashDialog.show();
-            if (hideAfterDelay) {
-                final Handler handler = new Handler();
-                handler.postDelayed(() -> {
-                    if (lastHideAfterDelay) {
-                        removeSplashScreen(false);
-                    }
-                }, effectiveSplashDuration);
-            }
-            return;
-        }
-
         cordova.getActivity().runOnUiThread(() -> {
             // Get reference to display
             Display display = cordova.getActivity().getWindowManager().getDefaultDisplay();
