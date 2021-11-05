@@ -1,0 +1,27 @@
+pool:
+    name: Hosted VS2017
+    demands: npm
+
+#Your build pipeline references a secret variable named ‘BuildVersionPAT’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
+trigger: none
+
+steps:
+    - task: versioncounter@1
+      inputs:
+          VersionVariable: "version"
+          DevOpsPat: "$(BuildVersionPAT)"
+    - task: MagicChunks@2
+      inputs:
+          sourcePath: "package.json"
+          fileType: "Auto"
+          targetPathType: "source"
+          transformationType: "json"
+          transformations: |
+              {
+                "version": "$(version)"
+              }
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifact: drop"
+      inputs:
+          PathtoPublish: "$(Build.SourcesDirectory)"
